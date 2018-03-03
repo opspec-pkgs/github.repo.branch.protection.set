@@ -1,0 +1,51 @@
+name: github.com/opspec-pkgs/github.repo.branch.protection.set
+description: sets protection for a branch of a github repo
+inputs:
+  accessToken:
+    string:
+      constraints: { minLength: 1 }
+      description: access token to authenticate with; see https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/
+      isSecret: true
+  ownerName:
+    string:
+      constraints: { minLength: 1 }
+      description: name of owner (user or org)
+  repoName:
+    string:
+      constraints: { minLength: 1 }
+      description: name of repo
+  branchName:
+    string:
+      constraints: { minLength: 1 }
+      description: name of branch
+  protection:
+    object:
+      description: protection to set for branch; see [github api docs](https://developer.github.com/v3/repos/branches/#update-branch-protection) for schema
+      default:
+        required_status_checks:
+          strict: true
+          contexts: []
+        enforce_admins: false
+        required_pull_request_reviews:
+          dismissal_restrictions:
+            users: []
+            teams: []
+          dismiss_stale_reviews: true
+          require_code_owner_reviews: true
+        restrictions:
+          users: []
+          teams: []
+version: 1.0.0
+run:
+  container:
+    image: { ref: 'opspecpkgs/github.repo.branch.protection.set:1.0.0' }
+    cmd: [ /cmd.sh ]
+    envVars:
+      accessToken:
+      ownerName:
+      repoName:
+      branchName:
+    files:
+      /cmd.sh:
+      /protection: $(protection)
+
