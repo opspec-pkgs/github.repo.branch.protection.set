@@ -34,6 +34,8 @@ op:
     ownerName:
     repoName:
     branchName:
+    # params w/ default
+    protection:
 ```
 
 # Support
